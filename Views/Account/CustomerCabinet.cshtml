@@ -1,0 +1,1068 @@
+@{
+    ViewData["Title"] = "My Cabinet";
+    Layout = "_Layout";
+}
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container position-relative">
+        <div class="row min-vh-50 align-items-center">
+            <div class="col-lg-8 text-white">
+                <h1 class="display-3 fw-bold mb-4">My Cabinet</h1>
+                <p class="lead mb-5">Manage your profile and view all your bookings in one place.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-n5">
+    <div class="row">
+        <!-- Personal Information Card -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-circle mb-3">
+                            <span class="initials">@User.Identity?.Name?.Substring(0, 1).ToUpper()</span>
+                        </div>
+                        <h4 class="card-title mb-1">@User.Identity?.Name</h4>
+                        <p class="text-muted">Member since @DateTime.Now.AddYears(-1).ToString("MMMM yyyy")</p>
+                    </div>
+                    <div class="user-info">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" value="John Doe" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" value="@User.Identity?.Name" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" value="john.doe@example.com" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" value="+1 234 567 890" readonly>
+                        </div>
+                        <button class="btn btn-primary w-100" onclick="editProfile()">
+                            <i class="fas fa-edit me-2"></i>Edit Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Stats</h5>
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <h3 id="totalBookings">0</h3>
+                            <small class="text-muted">Total Bookings</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <h3 id="activeBookings">0</h3>
+                            <small class="text-muted">Active Bookings</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booked Services Section -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">My Booked Services</h5>
+                    
+                    <ul class="nav nav-tabs" id="bookingTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="flights-tab" data-bs-toggle="tab" data-bs-target="#flights" type="button" role="tab" aria-controls="flights" aria-selected="true">
+                                <i class="fas fa-plane me-2"></i>Flights <span class="badge bg-primary ms-1" id="flightsCount">0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="cars-tab" data-bs-toggle="tab" data-bs-target="#cars" type="button" role="tab" aria-controls="cars" aria-selected="false">
+                                <i class="fas fa-car me-2"></i>Car Rentals <span class="badge bg-primary ms-1" id="carsCount">0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="hotels-tab" data-bs-toggle="tab" data-bs-target="#hotels" type="button" role="tab" aria-controls="hotels" aria-selected="false">
+                                <i class="fas fa-hotel me-2"></i>Hotels <span class="badge bg-primary ms-1" id="hotelsCount">0</span>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="attractions-tab" data-bs-toggle="tab" data-bs-target="#attractions" type="button" role="tab" aria-controls="attractions" aria-selected="false">
+                                <i class="fas fa-ticket-alt me-2"></i>Attractions <span class="badge bg-primary ms-1" id="attractionsCount">0</span>
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="bookingTabsContent">
+                        <div class="tab-pane fade show active" id="flights" role="tabpanel" aria-labelledby="flights-tab">
+                            <div id="bookedFlightsList">
+                                <!-- Booked flights will be loaded here -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="cars" role="tabpanel" aria-labelledby="cars-tab">
+                            <div class="row" id="bookedCarsList">
+                                <!-- Booked cars will be loaded here -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="hotels" role="tabpanel" aria-labelledby="hotels-tab">
+                            <div id="bookedHotelsList" class="row">
+                                <!-- Booked hotels will be loaded here -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="attractions" role="tabpanel" aria-labelledby="attractions-tab">
+                            <div id="bookedAttractionsList">
+                                <!-- Booked attractions will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Booking Details Modal -->
+<div class="modal fade" id="bookingDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Booking Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be dynamically loaded -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="cancelBookingBtn">Cancel Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        :root {
+            --booking-blue: #003580;
+            --booking-light-blue: #0071c2;
+        }
+
+        .hero-section {
+            background: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+            position: relative;
+            min-height: 300px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .avatar-circle {
+            width: 80px;
+            height: 80px;
+            background-color: var(--booking-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .initials {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .user-info input {
+            background-color: #f8f9fa;
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--booking-blue);
+            border-radius: 20px;
+            padding: 8px 20px;
+            margin-right: 10px;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: var(--booking-blue);
+            color: white;
+        }
+
+        .card {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 8px;
+        }
+
+        .booking-card {
+            transition: transform 0.2s;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.4em 0.6em;
+        }
+
+        .section-title {
+            color: var(--booking-blue);
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .booking-details {
+            font-size: 0.9rem;
+        }
+
+        .booking-details i {
+            width: 20px;
+            color: #6c757d;
+        }
+
+        .additional-options {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .booking-actions {
+            border-top: 1px solid #dee2e6;
+            padding-top: 15px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Load user profile data
+        function loadUserProfile() {
+            // In a real application, this would come from your backend
+            const userProfile = {
+                fullName: "John Doe",
+                username: "@User.Identity?.Name",
+                email: "john.doe@example.com",
+                phone: "+1 234 567 890"
+            };
+
+            document.getElementById('fullName').value = userProfile.fullName;
+            document.getElementById('username').value = userProfile.username;
+            document.getElementById('email').value = userProfile.email;
+            document.getElementById('phone').value = userProfile.phone;
+        }
+
+        // Edit profile
+        function editProfile() {
+            const modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+            
+            // Populate modal with current values
+            document.getElementById('editFullName').value = document.getElementById('fullName').value;
+            document.getElementById('editEmail').value = document.getElementById('email').value;
+            document.getElementById('editPhone').value = document.getElementById('phone').value;
+            
+            modal.show();
+        }
+
+        // Save profile changes
+        function saveProfile() {
+            // In a real application, this would send data to your backend
+            const newProfile = {
+                fullName: document.getElementById('editFullName').value,
+                email: document.getElementById('editEmail').value,
+                phone: document.getElementById('editPhone').value
+            };
+
+            // Update the display
+            document.getElementById('fullName').value = newProfile.fullName;
+            document.getElementById('email').value = newProfile.email;
+            document.getElementById('phone').value = newProfile.phone;
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+            modal.hide();
+
+            // Show success message
+            alert('Profile updated successfully!');
+        }
+
+        // Update booking stats
+        function updateBookingStats() {
+            const flights = JSON.parse(localStorage.getItem('bookedFlights') || '[]');
+            const cars = JSON.parse(localStorage.getItem('bookedCars') || '[]');
+            const hotels = JSON.parse(localStorage.getItem('bookedHotels') || '[]');
+            
+            const totalBookings = flights.length + cars.length + hotels.length;
+            const activeBookings = flights.filter(f => f.status === 'Confirmed').length + 
+                                 cars.filter(c => c.status === 'Confirmed').length +
+                                 hotels.filter(h => h.status === 'Confirmed').length;
+            
+            document.getElementById('totalBookings').textContent = totalBookings;
+            document.getElementById('activeBookings').textContent = activeBookings;
+        }
+
+        // Load booked flights
+        function loadBookedFlights() {
+            const bookings = JSON.parse(localStorage.getItem('bookedFlights') || '[]');
+            const flightsList = document.getElementById('bookedFlightsList');
+            const flightsCount = document.getElementById('flightsCount');
+            
+            flightsCount.textContent = bookings.length;
+            
+            if (bookings.length === 0) {
+                flightsList.innerHTML = '<div class="alert alert-info">No flights booked yet.</div>';
+                return;
+            }
+
+            flightsList.innerHTML = bookings.map(booking => createFlightBookingCard(booking)).join('');
+            updateBookingStats();
+        }
+
+        // Create flight booking card
+        function createFlightBookingCard(booking) {
+            const departureTime = new Date(booking.departureTime);
+            const arrivalTime = new Date(booking.arrivalTime);
+            const duration = Math.round((arrivalTime - departureTime) / (1000 * 60));
+
+            return `
+                <div class="card mb-3 booking-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h5 class="card-title mb-1">${booking.airline} - ${booking.flightNumber}</h5>
+                                        <p class="text-muted mb-0">${booking.class} Class</p>
+                                    </div>
+                                    <span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span>
+                                </div>
+                                <div class="flight-route mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-0">${departureTime.getHours()}:${departureTime.getMinutes().toString().padStart(2, '0')}</h6>
+                                            <small class="text-muted">${booking.departureCity}</small>
+                                            <br>
+                                            <small class="text-muted">${departureTime.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}</small>
+                                        </div>
+                                        <div class="flight-path">
+                                            <div class="duration">${Math.floor(duration / 60)}h ${duration % 60}m</div>
+                                            <div class="line"></div>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">${arrivalTime.getHours()}:${arrivalTime.getMinutes().toString().padStart(2, '0')}</h6>
+                                            <small class="text-muted">${booking.arrivalCity}</small>
+                                            <br>
+                                            <small class="text-muted">${arrivalTime.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="booking-details">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="mb-2">
+                                                <i class="fas fa-user me-2"></i>
+                                                <strong>Passengers:</strong> ${booking.passengers}
+                                            </p>
+                                            <p class="mb-2">
+                                                <i class="fas fa-chair me-2"></i>
+                                                <strong>Seat Type:</strong> ${booking.seatType || 'Standard'}
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-2">
+                                                <i class="fas fa-calendar me-2"></i>
+                                                <strong>Booked:</strong> ${formatDate(booking.bookingDate)}
+                                            </p>
+                                            <p class="mb-2">
+                                                <i class="fas fa-credit-card me-2"></i>
+                                                <strong>Payment:</strong> ${booking.paymentMethod}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="price-section mb-3">
+                                    <h4 class="mb-1">${booking.totalPrice}</h4>
+                                    <small class="text-muted">Total Price</small>
+                                </div>
+                                <div class="booking-actions">
+                                    <button class="btn btn-outline-primary me-2" onclick="viewBookingDetails(${booking.flightId})">
+                                        <i class="fas fa-info-circle me-1"></i>View Details
+                                    </button>
+                                    <button class="btn btn-outline-danger" onclick="cancelBooking(${booking.flightId})">
+                                        <i class="fas fa-times-circle me-1"></i>Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function viewBookingDetails(flightId) {
+            const bookings = JSON.parse(localStorage.getItem('bookedFlights') || '[]');
+            const booking = bookings.find(b => b.flightId === flightId);
+            
+            if (!booking) return;
+
+            const departureTime = new Date(booking.departureTime);
+            const arrivalTime = new Date(booking.arrivalTime);
+            const duration = Math.round((arrivalTime - departureTime) / (1000 * 60));
+
+            const modal = new bootstrap.Modal(document.getElementById('bookingDetailsModal'));
+            
+            document.getElementById('modalTitle').textContent = 'Flight Booking Details';
+            document.getElementById('modalBody').innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="flight-info-section">
+                            <h6 class="section-title">Flight Information</h6>
+                            <div class="flight-route mb-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5>${departureTime.getHours()}:${departureTime.getMinutes().toString().padStart(2, '0')}</h5>
+                                        <p class="text-muted">${booking.departureCity}</p>
+                                        <small class="text-muted">${departureTime.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}</small>
+                                    </div>
+                                    <div class="flight-path">
+                                        <div class="duration">${Math.floor(duration / 60)}h ${duration % 60}m</div>
+                                        <div class="line"></div>
+                                    </div>
+                                    <div>
+                                        <h5>${arrivalTime.getHours()}:${arrivalTime.getMinutes().toString().padStart(2, '0')}</h5>
+                                        <p class="text-muted">${booking.arrivalCity}</p>
+                                        <small class="text-muted">${arrivalTime.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flight-details">
+                                <p><strong>Airline:</strong> ${booking.airline}</p>
+                                <p><strong>Flight Number:</strong> ${booking.flightNumber}</p>
+                                <p><strong>Class:</strong> ${booking.class}</p>
+                                <p><strong>Status:</strong> <span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="booking-info-section">
+                            <h6 class="section-title">Booking Information</h6>
+                            <div class="booking-details">
+                                <p><strong>Booking Date:</strong> ${formatDate(booking.bookingDate)}</p>
+                                <p><strong>Passengers:</strong> ${booking.passengers}</p>
+                                <p><strong>Seat Type:</strong> ${booking.seatType}</p>
+                                <p><strong>Payment Method:</strong> ${booking.paymentMethod}</p>
+                                <p><strong>Total Price:</strong> ${booking.totalPrice}</p>
+                            </div>
+                            ${booking.specialRequests ? `
+                                <div class="mt-3">
+                                    <h6 class="section-title">Special Requests</h6>
+                                    <p>${booking.specialRequests}</p>
+                                </div>
+                            ` : ''}
+                            ${booking.frequentFlyerNumber ? `
+                                <div class="mt-3">
+                                    <h6 class="section-title">Frequent Flyer Information</h6>
+                                    <p><strong>Number:</strong> ${booking.frequentFlyerNumber}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Set up cancel button
+            const cancelBtn = document.getElementById('cancelBookingBtn');
+            cancelBtn.onclick = () => cancelBooking(flightId);
+            
+            modal.show();
+        }
+
+        function cancelBooking(flightId) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                let bookings = JSON.parse(localStorage.getItem('bookedFlights') || '[]');
+                bookings = bookings.filter(booking => booking.flightId !== flightId);
+                localStorage.setItem('bookedFlights', JSON.stringify(bookings));
+                loadBookedFlights();
+                
+                // Close modal if it's open
+                const modal = bootstrap.Modal.getInstance(document.getElementById('bookingDetailsModal'));
+                if (modal) {
+                    modal.hide();
+                }
+            }
+        }
+
+        // Function to get status badge class
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'Confirmed':
+                    return 'bg-success';
+                case 'Pending':
+                    return 'bg-warning';
+                case 'Cancelled':
+                    return 'bg-danger';
+                default:
+                    return 'bg-secondary';
+            }
+        }
+
+        // Function to calculate duration between dates
+        function calculateDuration(startDate, endDate) {
+            const diffTime = Math.abs(endDate - startDate);
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        // Function to view car booking details
+        function viewCarBookingDetails(carId) {
+            const bookings = JSON.parse(localStorage.getItem('bookedCars') || '[]');
+            const booking = bookings.find(b => b.carId === parseInt(carId));
+            
+            if (!booking) return;
+
+            const pickupDate = new Date(booking.pickupDate);
+            const dropoffDate = new Date(booking.dropoffDate);
+            const bookingDate = new Date(booking.bookingDate);
+
+            const modal = new bootstrap.Modal(document.getElementById('bookingDetailsModal'));
+            
+            document.getElementById('modalTitle').textContent = 'Car Rental Details';
+            document.getElementById('modalBody').innerHTML = `
+                <div class="booking-details">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Car Information</h5>
+                            <p><strong>Model:</strong> ${booking.carModel}</p>
+                            <p><strong>Type:</strong> ${booking.carType}</p>
+                            <p><strong>Location:</strong> ${booking.location}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Rental Period</h5>
+                            <p><strong>Pick-up:</strong> ${formatDate(pickupDate)}</p>
+                            <p><strong>Drop-off:</strong> ${formatDate(dropoffDate)}</p>
+                            <p><strong>Duration:</strong> ${calculateDuration(pickupDate, dropoffDate)} days</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h5>Additional Options</h5>
+                            <ul>
+                                <li>Insurance: ${booking.insurance ? 'Yes' : 'No'}</li>
+                                <li>GPS: ${booking.gps ? 'Yes' : 'No'}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Payment Information</h5>
+                            <p><strong>Method:</strong> ${booking.paymentMethod}</p>
+                            <p><strong>Total Price:</strong> ${booking.totalPrice}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h5>Booking Information</h5>
+                            <p><strong>Booking Date:</strong> ${formatDate(bookingDate)}</p>
+                            <p><strong>Status:</strong> <span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Set up cancel button
+            const cancelBtn = document.getElementById('cancelBookingBtn');
+            cancelBtn.onclick = () => cancelCarBooking(carId);
+            
+            modal.show();
+        }
+
+        // Function to cancel car booking
+        function cancelCarBooking(carId) {
+            if (!confirm('Are you sure you want to cancel this car rental booking?')) {
+                return;
+            }
+
+            let bookings = JSON.parse(localStorage.getItem('bookedCars') || '[]');
+            bookings = bookings.filter(b => b.carId !== parseInt(carId));
+            localStorage.setItem('bookedCars', JSON.stringify(bookings));
+            
+            // Close modal if it's open
+            const modal = bootstrap.Modal.getInstance(document.getElementById('bookingDetailsModal'));
+            if (modal) {
+                modal.hide();
+            }
+            
+            loadBookedCars();
+            updateBookingStats();
+        }
+
+        // Function to load booked cars
+        function loadBookedCars() {
+            const bookings = JSON.parse(localStorage.getItem('bookedCars') || '[]');
+            const carsList = document.getElementById('bookedCarsList');
+            const carsCount = document.getElementById('carsCount');
+            
+            carsCount.textContent = bookings.length;
+            
+            if (bookings.length === 0) {
+                carsList.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            You haven't booked any cars yet.
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            carsList.innerHTML = bookings.map(booking => createCarBookingCard(booking)).join('');
+        }
+
+        // Function to create car booking card
+        function createCarBookingCard(booking) {
+            const pickupDate = new Date(booking.pickupDate);
+            const dropoffDate = new Date(booking.dropoffDate);
+            const bookingDate = new Date(booking.bookingDate);
+            
+            return `
+                <div class="col-md-6 mb-4">
+                    <div class="card booking-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="card-title mb-1">${booking.carModel}</h5>
+                                    <p class="text-muted mb-0">${booking.carType}</p>
+                                </div>
+                                <span class="badge ${getStatusBadgeClass(booking.status)}">${booking.status}</span>
+                            </div>
+                            <div class="booking-details">
+                                <p class="mb-2">
+                                    <i class="fas fa-map-marker-alt me-2"></i>
+                                    <strong>Location:</strong> ${booking.location}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-calendar-alt me-2"></i>
+                                    <strong>Pick-up:</strong> ${formatDate(pickupDate)}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-calendar-alt me-2"></i>
+                                    <strong>Drop-off:</strong> ${formatDate(dropoffDate)}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-money-bill-wave me-2"></i>
+                                    <strong>Price:</strong> ${booking.totalPrice}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-credit-card me-2"></i>
+                                    <strong>Payment:</strong> ${booking.paymentMethod}
+                                </p>
+                                <div class="additional-options">
+                                    <p class="mb-2"><strong>Additional Options:</strong></p>
+                                    <ul class="list-unstyled ms-3">
+                                        <li><i class="fas fa-check-circle me-2"></i>Insurance: ${booking.insurance ? 'Yes' : 'No'}</li>
+                                        <li><i class="fas fa-check-circle me-2"></i>GPS: ${booking.gps ? 'Yes' : 'No'}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="booking-actions mt-3">
+                                <button class="btn btn-outline-primary me-2" onclick="viewCarBookingDetails('${booking.carId}')">
+                                    <i class="fas fa-info-circle me-1"></i>View Details
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="cancelCarBooking('${booking.carId}')">
+                                    <i class="fas fa-times-circle me-1"></i>Cancel Booking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load booked hotels
+        function loadBookedHotels() {
+            const bookings = JSON.parse(localStorage.getItem('bookedHotels') || '[]');
+            const hotelsList = document.getElementById('bookedHotelsList');
+            const hotelsCount = document.getElementById('hotelsCount');
+            
+            if (!hotelsList || !hotelsCount) {
+                console.error('Hotel elements not found');
+                return;
+            }
+            
+            hotelsCount.textContent = bookings.length;
+            
+            if (bookings.length === 0) {
+                hotelsList.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No hotels booked yet.
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            hotelsList.innerHTML = bookings.map(booking => createHotelBookingCard(booking)).join('');
+            updateBookingStats();
+        }
+
+        // Create hotel booking card
+        function createHotelBookingCard(booking) {
+            const checkInDate = new Date(booking.checkIn);
+            const checkOutDate = new Date(booking.checkOut);
+            const duration = calculateDuration(checkInDate, checkOutDate);
+
+            return `
+                <div class="col-md-6 mb-4">
+                    <div class="card booking-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="card-title mb-1">${booking.hotelName}</h5>
+                                    <p class="text-muted mb-0">${booking.location || 'Location not specified'}</p>
+                                </div>
+                                <span class="badge bg-success">Confirmed</span>
+                            </div>
+                            <div class="booking-details">
+                                <p class="mb-2">
+                                    <i class="fas fa-calendar-check me-2"></i>
+                                    <strong>Check-in:</strong> ${formatDate(checkInDate)}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-calendar-times me-2"></i>
+                                    <strong>Check-out:</strong> ${formatDate(checkOutDate)}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-clock me-2"></i>
+                                    <strong>Duration:</strong> ${duration} days
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-bed me-2"></i>
+                                    <strong>Room Type:</strong> ${booking.roomType || 'Standard'}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-users me-2"></i>
+                                    <strong>Guests:</strong> ${booking.guests}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-money-bill-wave me-2"></i>
+                                    <strong>Total Price:</strong> ${booking.totalPrice}
+                                </p>
+                                <div class="additional-options">
+                                    <p class="mb-2"><strong>Additional Services:</strong></p>
+                                    <ul class="list-unstyled ms-3">
+                                        <li><i class="fas fa-check-circle me-2"></i>Breakfast: ${booking.additionalServices?.breakfast ? 'Included' : 'Not included'}</li>
+                                        <li><i class="fas fa-check-circle me-2"></i>Parking: ${booking.additionalServices?.parking ? 'Available' : 'Not available'}</li>
+                                        <li><i class="fas fa-check-circle me-2"></i>WiFi: ${booking.additionalServices?.wifi ? 'Included' : 'Not included'}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="booking-actions mt-3">
+                                <button class="btn btn-outline-primary me-2" onclick="viewHotelBookingDetails('${booking.hotelId}')">
+                                    <i class="fas fa-info-circle me-1"></i>View Details
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="cancelHotelBooking('${booking.hotelId}')">
+                                    <i class="fas fa-times-circle me-1"></i>Cancel Booking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to view hotel booking details
+        function viewHotelBookingDetails(hotelId) {
+            const bookings = JSON.parse(localStorage.getItem('bookedHotels') || '[]');
+            const booking = bookings.find(b => b.hotelId === parseInt(hotelId));
+            
+            if (!booking) return;
+
+            const checkInDate = new Date(booking.checkIn);
+            const checkOutDate = new Date(booking.checkOut);
+            const bookingDate = new Date(booking.bookingDate);
+
+            const modal = new bootstrap.Modal(document.getElementById('bookingDetailsModal'));
+            
+            document.getElementById('modalTitle').textContent = 'Hotel Booking Details';
+            document.getElementById('modalBody').innerHTML = `
+                <div class="booking-details">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Hotel Information</h5>
+                            <p><strong>Hotel Name:</strong> ${booking.hotelName}</p>
+                            <p><strong>Location:</strong> ${booking.location || 'Location not specified'}</p>
+                            <p><strong>Room Type:</strong> ${booking.roomType || 'Standard'}</p>
+                            <p><strong>Guests:</strong> ${booking.guests}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Stay Details</h5>
+                            <p><strong>Check-in:</strong> ${formatDate(checkInDate)}</p>
+                            <p><strong>Check-out:</strong> ${formatDate(checkOutDate)}</p>
+                            <p><strong>Duration:</strong> ${calculateDuration(checkInDate, checkOutDate)} days</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h5>Additional Services</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-utensils me-2"></i>Breakfast: ${booking.additionalServices?.breakfast ? 'Included' : 'Not included'}</li>
+                                <li><i class="fas fa-parking me-2"></i>Parking: ${booking.additionalServices?.parking ? 'Available' : 'Not available'}</li>
+                                <li><i class="fas fa-wifi me-2"></i>WiFi: ${booking.additionalServices?.wifi ? 'Included' : 'Not included'}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Payment Information</h5>
+                            <p><strong>Total Price:</strong> ${booking.totalPrice}</p>
+                            <p><strong>Booking Date:</strong> ${formatDate(bookingDate)}</p>
+                            <p><strong>Status:</strong> <span class="badge bg-success">Confirmed</span></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Set up cancel button
+            const cancelBtn = document.getElementById('cancelBookingBtn');
+            cancelBtn.onclick = () => cancelHotelBooking(hotelId);
+            
+            modal.show();
+        }
+
+        // Function to cancel hotel booking
+        function cancelHotelBooking(hotelId) {
+            if (!confirm('Are you sure you want to cancel this hotel booking?')) {
+                return;
+            }
+
+            let bookings = JSON.parse(localStorage.getItem('bookedHotels') || '[]');
+            bookings = bookings.filter(b => b.hotelId !== parseInt(hotelId));
+            localStorage.setItem('bookedHotels', JSON.stringify(bookings));
+            
+            // Close modal if it's open
+            const modal = bootstrap.Modal.getInstance(document.getElementById('bookingDetailsModal'));
+            if (modal) {
+                modal.hide();
+            }
+            
+            loadBookedHotels();
+            updateBookingStats();
+        }
+
+        // Function to load booked attractions
+        function loadBookedAttractions() {
+            const bookings = JSON.parse(localStorage.getItem('bookedAttractions') || '[]');
+            const attractionsList = document.getElementById('bookedAttractionsList');
+            const attractionsCount = document.getElementById('attractionsCount');
+            
+            attractionsCount.textContent = bookings.length;
+            
+            if (bookings.length === 0) {
+                attractionsList.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No attractions booked yet.
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            attractionsList.innerHTML = bookings.map(booking => createAttractionBookingCard(booking)).join('');
+            updateBookingStats();
+        }
+
+        // Function to create attraction booking card
+        function createAttractionBookingCard(booking) {
+            const visitDate = new Date(booking.visitDate);
+            const bookingDate = new Date(booking.bookingDate);
+
+            return `
+                <div class="col-md-6 mb-4">
+                    <div class="card booking-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="card-title mb-1">${booking.attractionName}</h5>
+                                    <p class="text-muted mb-0">${booking.location}</p>
+                                </div>
+                                <span class="badge bg-success">${booking.status}</span>
+                            </div>
+                            <div class="booking-details">
+                                <p class="mb-2">
+                                    <i class="fas fa-calendar-check me-2"></i>
+                                    <strong>Visit Date:</strong> ${formatDate(visitDate)}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-ticket-alt me-2"></i>
+                                    <strong>Tickets:</strong> ${booking.ticketCount} ${booking.ticketCount === 1 ? 'Adult' : 'Adults'}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-money-bill-wave me-2"></i>
+                                    <strong>Total Price:</strong> ${booking.totalPrice}
+                                </p>
+                                <div class="additional-options">
+                                    <p class="mb-2"><strong>Additional Services:</strong></p>
+                                    <ul class="list-unstyled ms-3">
+                                        <li><i class="fas fa-check-circle me-2"></i>Guided Tour: ${booking.additionalOptions?.guidedTour ? 'Included' : 'Not included'}</li>
+                                        <li><i class="fas fa-check-circle me-2"></i>Audio Guide: ${booking.additionalOptions?.audioGuide ? 'Included' : 'Not included'}</li>
+                                        <li><i class="fas fa-check-circle me-2"></i>Skip-the-Line: ${booking.additionalOptions?.skipLine ? 'Included' : 'Not included'}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="booking-actions mt-3">
+                                <button class="btn btn-outline-primary me-2" onclick="viewAttractionBookingDetails('${booking.attractionId}')">
+                                    <i class="fas fa-info-circle me-1"></i>View Details
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="cancelAttractionBooking('${booking.attractionId}')">
+                                    <i class="fas fa-times-circle me-1"></i>Cancel Booking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to view attraction booking details
+        function viewAttractionBookingDetails(attractionId) {
+            const bookings = JSON.parse(localStorage.getItem('bookedAttractions') || '[]');
+            const booking = bookings.find(b => b.attractionId === parseInt(attractionId));
+            
+            if (!booking) return;
+
+            const visitDate = new Date(booking.visitDate);
+            const bookingDate = new Date(booking.bookingDate);
+
+            const modal = new bootstrap.Modal(document.getElementById('bookingDetailsModal'));
+            
+            document.getElementById('modalTitle').textContent = 'Attraction Booking Details';
+            document.getElementById('modalBody').innerHTML = `
+                <div class="booking-details">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Attraction Information</h5>
+                            <p><strong>Name:</strong> ${booking.attractionName}</p>
+                            <p><strong>Location:</strong> ${booking.location}</p>
+                            <p><strong>Tickets:</strong> ${booking.ticketCount} ${booking.ticketCount === 1 ? 'Adult' : 'Adults'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Visit Details</h5>
+                            <p><strong>Visit Date:</strong> ${formatDate(visitDate)}</p>
+                            <p><strong>Booking Date:</strong> ${formatDate(bookingDate)}</p>
+                            <p><strong>Status:</strong> <span class="badge bg-success">${booking.status}</span></p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h5>Additional Services</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-user-tie me-2"></i>Guided Tour: ${booking.additionalOptions?.guidedTour ? 'Included' : 'Not included'}</li>
+                                <li><i class="fas fa-headphones me-2"></i>Audio Guide: ${booking.additionalOptions?.audioGuide ? 'Included' : 'Not included'}</li>
+                                <li><i class="fas fa-running me-2"></i>Skip-the-Line: ${booking.additionalOptions?.skipLine ? 'Included' : 'Not included'}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Payment Information</h5>
+                            <p><strong>Total Price:</strong> ${booking.totalPrice}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Set up cancel button
+            const cancelBtn = document.getElementById('cancelBookingBtn');
+            cancelBtn.onclick = () => cancelAttractionBooking(attractionId);
+            
+            modal.show();
+        }
+
+        // Function to cancel attraction booking
+        function cancelAttractionBooking(attractionId) {
+            if (!confirm('Are you sure you want to cancel this attraction booking?')) {
+                return;
+            }
+
+            let bookings = JSON.parse(localStorage.getItem('bookedAttractions') || '[]');
+            bookings = bookings.filter(b => b.attractionId !== parseInt(attractionId));
+            localStorage.setItem('bookedAttractions', JSON.stringify(bookings));
+            
+            // Close modal if it's open
+            const modal = bootstrap.Modal.getInstance(document.getElementById('bookingDetailsModal'));
+            if (modal) {
+                modal.hide();
+            }
+            
+            loadBookedAttractions();
+            updateBookingStats();
+        }
+
+        // Update the loadBookings function to include attractions
+        function loadBookings() {
+            loadBookedFlights();
+            loadBookedCars();
+            loadBookedHotels();
+            loadBookedAttractions();
+            updateBookingStats();
+        }
+
+        // Initialize when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, initializing...');
+            loadUserProfile();
+            loadBookings();
+
+            // Set up tab change event listeners
+            const tabLinks = document.querySelectorAll('[data-bs-toggle="tab"]');
+            tabLinks.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function (e) {
+                    console.log('Tab changed to:', e.target.getAttribute('data-bs-target'));
+                    const targetId = e.target.getAttribute('data-bs-target').substring(1);
+                    switch(targetId) {
+                        case 'flights':
+                            loadBookedFlights();
+                            break;
+                        case 'cars':
+                            loadBookedCars();
+                            break;
+                        case 'hotels':
+                            loadBookedHotels();
+                            break;
+                        case 'attractions':
+                            loadBookedAttractions();
+                            break;
+                    }
+                });
+            });
+        });
+    </script>
+} 

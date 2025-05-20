@@ -1,0 +1,52 @@
+@{
+    var currentController = ViewContext.RouteData.Values["controller"].ToString();
+    Layout = "_Layout";
+}
+
+<div class="search-section bg-primary text-white p-4 mb-4">
+    <div class="container">
+        <h1 class="display-4 mb-4">@ViewData["Title"]</h1>
+        <div class="search-tabs">
+            <div class="nav nav-pills mb-3" id="searchTabs" role="tablist">
+                <a class="nav-link @(currentController == "Hotels" ? "active" : "")" 
+                   href="@Url.Action("Index", "Hotels")">Hotels</a>
+                <a class="nav-link @(currentController == "Flights" ? "active" : "")" 
+                   href="@Url.Action("Index", "Flights")">Flights</a>
+                <a class="nav-link @(currentController == "Attractions" ? "active" : "")" 
+                   href="@Url.Action("Index", "Attractions")">Attractions</a>
+                <a class="nav-link @(currentController == "CarRentals" ? "active" : "")" 
+                   href="@Url.Action("Index", "CarRentals")">Car Rentals</a>
+            </div>
+        </div>
+        @RenderSection("SearchForm", required: false)
+    </div>
+</div>
+
+<div class="container">
+    @RenderBody()
+</div>
+
+@section Styles {
+    <style>
+        .search-tabs .nav-link {
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-right: 0.5rem;
+        }
+        
+        .search-tabs .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .search-tabs .nav-link.active {
+            background-color: white;
+            color: var(--booking-blue);
+        }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+}
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+} 

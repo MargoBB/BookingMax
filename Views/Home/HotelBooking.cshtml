@@ -1,0 +1,537 @@
+@{
+    ViewData["Title"] = "Hotel Booking";
+    Layout = "_Layout";
+}
+
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-md-8">
+                <h1 class="display-4 text-white mb-4">Find Your Perfect Stay</h1>
+                <p class="lead text-white mb-4">Discover amazing hotels and book your dream vacation today</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-n5">
+    <!-- Search Box -->
+    <div class="card search-box">
+        <div class="card-body">
+            <form id="hotelSearchForm">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="search-input">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" class="form-control" id="destination" placeholder="Where are you going?">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="search-input">
+                            <i class="fas fa-calendar-check"></i>
+                            <input type="date" class="form-control" id="checkInDate">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="search-input">
+                            <i class="fas fa-calendar-times"></i>
+                            <input type="date" class="form-control" id="checkOutDate">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-2"></i>Search
+                        </button>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="search-filters">
+                            <div class="filter-group">
+                                <label class="filter-label">Guests</label>
+                                <select class="form-select" id="guests">
+                                    <option value="1">1 Guest</option>
+                                    <option value="2" selected>2 Guests</option>
+                                    <option value="3">3 Guests</option>
+                                    <option value="4">4 Guests</option>
+                                    <option value="5">5+ Guests</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Room Type</label>
+                                <select class="form-select" id="roomType">
+                                    <option value="standard">Standard Room</option>
+                                    <option value="deluxe">Deluxe Room</option>
+                                    <option value="suite">Suite</option>
+                                    <option value="family">Family Room</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Price Range</label>
+                                <select class="form-select" id="priceRange">
+                                    <option value="budget">Budget ($50-$100)</option>
+                                    <option value="moderate" selected>Moderate ($100-$200)</option>
+                                    <option value="luxury">Luxury ($200+)</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Amenities</label>
+                                <div class="amenities-checkboxes">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="breakfast">
+                                        <label class="form-check-label" for="breakfast">Breakfast</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="parking">
+                                        <label class="form-check-label" for="parking">Parking</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="wifi">
+                                        <label class="form-check-label" for="wifi">Free WiFi</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Featured Destinations -->
+    <div class="featured-destinations mt-5">
+        <h2 class="section-title">Popular Destinations</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="destination-card">
+                    <img src="https://via.placeholder.com/400x300" alt="New York" class="img-fluid">
+                    <div class="destination-info">
+                        <h3>New York</h3>
+                        <p>Starting from $150/night</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="destination-card">
+                    <img src="https://via.placeholder.com/400x300" alt="Paris" class="img-fluid">
+                    <div class="destination-info">
+                        <h3>Paris</h3>
+                        <p>Starting from $180/night</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="destination-card">
+                    <img src="https://via.placeholder.com/400x300" alt="Tokyo" class="img-fluid">
+                    <div class="destination-info">
+                        <h3>Tokyo</h3>
+                        <p>Starting from $200/night</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div id="searchResults" class="mt-5">
+        <h2 class="section-title">Available Hotels</h2>
+        <div class="row">
+            <!-- Hotel cards will be dynamically added here -->
+        </div>
+    </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Complete Your Booking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Check-in Date</label>
+                            <input type="date" class="form-control" id="modalCheckIn" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Check-out Date</label>
+                            <input type="date" class="form-control" id="modalCheckOut" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Room Type</label>
+                            <select class="form-select" id="modalRoomType" required>
+                                <option value="standard">Standard Room</option>
+                                <option value="deluxe">Deluxe Room</option>
+                                <option value="suite">Suite</option>
+                                <option value="family">Family Room</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Number of Guests</label>
+                            <select class="form-select" id="modalGuests" required>
+                                <option value="1">1 Guest</option>
+                                <option value="2" selected>2 Guests</option>
+                                <option value="3">3 Guests</option>
+                                <option value="4">4 Guests</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Special Requests</label>
+                            <textarea class="form-control" id="specialRequests" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Payment Method</label>
+                            <select class="form-select" id="paymentMethod" required>
+                                <option value="credit">Credit Card</option>
+                                <option value="debit">Debit Card</option>
+                                <option value="paypal">PayPal</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Total Price</label>
+                            <input type="text" class="form-control" id="totalPrice" readonly>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="confirmBooking()">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://via.placeholder.com/1920x600') center/cover;
+            padding: 100px 0;
+            margin-bottom: 50px;
+        }
+
+        .min-vh-75 {
+            min-height: 75vh;
+        }
+
+        .search-box {
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-input {
+            position: relative;
+        }
+
+        .search-input i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .search-input input {
+            padding-left: 40px;
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+
+        .amenities-checkboxes {
+            display: flex;
+            gap: 15px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .destination-card {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .destination-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .destination-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+        }
+
+        .destination-info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .destination-info p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+        }
+
+        .hotel-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            margin-bottom: 30px;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .hotel-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.5em 0.8em;
+            border-radius: 6px;
+        }
+
+        .btn-primary {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .booking-summary {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Sample hotel data
+        const hotels = [
+            {
+                id: 1,
+                name: "Grand Hotel",
+                location: "New York, USA",
+                rating: 4.5,
+                features: ["Free WiFi", "Breakfast", "Parking"],
+                roomTypes: {
+                    standard: { price: 150, available: true },
+                    deluxe: { price: 200, available: true },
+                    suite: { price: 300, available: true },
+                    family: { price: 250, available: true }
+                },
+                image: "https://via.placeholder.com/150"
+            },
+            // Add more hotels here
+        ];
+
+        // Search form submission
+        document.getElementById('hotelSearchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            searchHotels();
+        });
+
+        function searchHotels() {
+            const destination = document.getElementById('destination').value;
+            const checkIn = document.getElementById('checkInDate').value;
+            const checkOut = document.getElementById('checkOutDate').value;
+            const guests = document.getElementById('guests').value;
+            const roomType = document.getElementById('roomType').value;
+            const priceRange = document.getElementById('priceRange').value;
+            const breakfast = document.getElementById('breakfast').checked;
+            const parking = document.getElementById('parking').checked;
+            const wifi = document.getElementById('wifi').checked;
+
+            // Filter hotels based on search criteria
+            const filteredHotels = hotels.filter(hotel => {
+                // Add your filtering logic here
+                return true; // For now, return all hotels
+            });
+
+            displaySearchResults(filteredHotels);
+        }
+
+        function displaySearchResults(hotels) {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = hotels.map(hotel => createHotelCard(hotel)).join('');
+        }
+
+        function createHotelCard(hotel) {
+            return `
+                <div class="col-md-6 mb-4">
+                    <div class="card hotel-card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <img src="${hotel.image}" class="img-fluid rounded" alt="${hotel.name}">
+                                </div>
+                                <div class="col-md-8">
+                                    <h5 class="card-title">${hotel.name}</h5>
+                                    <p class="text-muted mb-2">
+                                        <i class="fas fa-map-marker-alt"></i> ${hotel.location}
+                                    </p>
+                                    <div class="hotel-features mb-2">
+                                        <span class="badge bg-info me-2">${hotel.rating} ★</span>
+                                        ${hotel.features.map(feature => 
+                                            `<span class="badge bg-success me-2">${feature}</span>`
+                                        ).join('')}
+                                    </div>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-bed me-1"></i> Deluxe Room
+                                            <i class="fas fa-users ms-2 me-1"></i> 2 Guests
+                                        </small>
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h4 class="mb-0">$${hotel.roomTypes.deluxe.price}</h4>
+                                            <small class="text-muted">per night</small>
+                                        </div>
+                                        <button class="btn btn-primary" onclick="showBookingModal(${hotel.id})">
+                                            Book Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showBookingModal(hotelId) {
+            const hotel = hotels.find(h => h.id === hotelId);
+            if (!hotel) return;
+
+            // Set modal values
+            document.getElementById('modalCheckIn').value = document.getElementById('checkInDate').value;
+            document.getElementById('modalCheckOut').value = document.getElementById('checkOutDate').value;
+            document.getElementById('modalGuests').value = document.getElementById('guests').value;
+            document.getElementById('modalRoomType').value = document.getElementById('roomType').value;
+            
+            // Calculate total price
+            const checkIn = new Date(document.getElementById('modalCheckIn').value);
+            const checkOut = new Date(document.getElementById('modalCheckOut').value);
+            const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+            const roomPrice = hotel.roomTypes[document.getElementById('modalRoomType').value].price;
+            const totalPrice = nights * roomPrice;
+            
+            document.getElementById('totalPrice').value = `$${totalPrice}`;
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            modal.show();
+        }
+
+        function confirmBooking() {
+            const booking = {
+                hotelId: 1, // Get this from the selected hotel
+                hotelName: "Grand Hotel", // Get this from the selected hotel
+                location: "New York, USA", // Get this from the selected hotel
+                roomType: document.getElementById('modalRoomType').value,
+                guests: document.getElementById('modalGuests').value,
+                checkInDate: document.getElementById('modalCheckIn').value,
+                checkOutDate: document.getElementById('modalCheckOut').value,
+                totalPrice: document.getElementById('totalPrice').value,
+                status: "Confirmed",
+                paymentMethod: document.getElementById('paymentMethod').value,
+                breakfast: document.getElementById('breakfast').checked,
+                parking: document.getElementById('parking').checked,
+                wifi: document.getElementById('wifi').checked,
+                bookingDate: new Date().toISOString()
+            };
+
+            // Save booking to localStorage
+            const bookings = JSON.parse(localStorage.getItem('bookedHotels') || '[]');
+            bookings.push(booking);
+            localStorage.setItem('bookedHotels', JSON.stringify(bookings));
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
+            modal.hide();
+
+            // Show success message
+            alert('Booking confirmed! You can view your booking in your customer cabinet.');
+        }
+    </script>
+} 

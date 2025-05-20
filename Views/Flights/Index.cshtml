@@ -1,0 +1,768 @@
+@model IEnumerable<BookingClone.Models.Flight>
+@{
+    ViewData["Title"] = "Flight Search";
+}
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container position-relative">
+        <div class="row min-vh-75 align-items-center">
+            <div class="col-lg-8 text-white">
+                <h1 class="display-3 fw-bold mb-4">Find Your Perfect Flight</h1>
+                <p class="lead mb-5">Search and book flights worldwide with our extensive selection and best price guarantee.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Box -->
+<div class="container">
+    <div class="search-box">
+        <div class="search-tabs">
+            <div class="nav nav-pills mb-4" id="searchTabs" role="tablist">
+                <a class="nav-link" href="@Url.Action("Index", "Hotels")">
+                    <i class="fas fa-hotel me-2"></i>Hotels
+                </a>
+                <a class="nav-link active" href="@Url.Action("Index", "Flights")">
+                    <i class="fas fa-plane me-2"></i>Flights
+                </a>
+                <a class="nav-link" href="@Url.Action("Index", "Attractions")">
+                    <i class="fas fa-ticket-alt me-2"></i>Attractions
+                </a>
+                <a class="nav-link" href="@Url.Action("Index", "CarRentals")">
+                    <i class="fas fa-car me-2"></i>Car Rentals
+                </a>
+            </div>
+        </div>
+        <form class="search-form" method="post" action="@Url.Action("Search", "Flights")">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="search-input">
+                        <i class="fas fa-plane-departure"></i>
+                        <input type="text" name="from" class="form-control" placeholder="From">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="search-input">
+                        <i class="fas fa-plane-arrival"></i>
+                        <input type="text" name="to" class="form-control" placeholder="To">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="search-input">
+                        <i class="fas fa-calendar-check"></i>
+                        <input type="date" name="departureDate" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="search-input">
+                        <i class="fas fa-user"></i>
+                        <select name="passengers" class="form-control">
+                            <option value="1">1 Passenger</option>
+                            <option value="2">2 Passengers</option>
+                            <option value="3">3 Passengers</option>
+                            <option value="4">4 Passengers</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Popular Destinations -->
+<div class="container mt-5">
+    <h2 class="section-title">Popular Flight Destinations</h2>
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="destination-card">
+                <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad" alt="London Flights">
+                <div class="destination-info">
+                    <h3>London</h3>
+                    <p>From $299</p>
+                    <a href="#" class="btn btn-light btn-sm">View Flights</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="destination-card">
+                <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a" alt="Paris Flights">
+                <div class="destination-info">
+                    <h3>Paris</h3>
+                    <p>From $349</p>
+                    <a href="#" class="btn btn-light btn-sm">View Flights</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="destination-card">
+                <img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017" alt="New York Flights">
+                <div class="destination-info">
+                    <h3>New York</h3>
+                    <p>From $399</p>
+                    <a href="#" class="btn btn-light btn-sm">View Flights</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="destination-card">
+                <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989" alt="Tokyo Flights">
+                <div class="destination-info">
+                    <h3>Tokyo</h3>
+                    <p>From $599</p>
+                    <a href="#" class="btn btn-light btn-sm">View Flights</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Special Flight Offers -->
+<div class="container mt-5">
+    <h2 class="section-title">Special Flight Offers</h2>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="offer-card">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05" class="img-fluid rounded-start" alt="Business Class">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Business Class Upgrade</h5>
+                            <p class="card-text">Get 30% off on business class upgrades</p>
+                            <p class="card-text"><small class="text-muted">Valid until Dec 31, 2024</small></p>
+                            <a href="#" class="btn btn-outline-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="offer-card">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05" class="img-fluid rounded-start" alt="Round Trip">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Round Trip Deal</h5>
+                            <p class="card-text">Save 20% on round trip flights</p>
+                            <p class="card-text"><small class="text-muted">Valid until Dec 31, 2024</small></p>
+                            <a href="#" class="btn btn-outline-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Why Choose Our Flights -->
+<div class="container mt-5">
+    <h2 class="section-title text-center">Why Choose Our Flights</h2>
+    <div class="row g-4 mt-3">
+        <div class="col-md-3">
+            <div class="feature-card text-center">
+                <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+                <h4>Secure Booking</h4>
+                <p>Your data is protected with us</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card text-center">
+                <i class="fas fa-percent fa-3x mb-3 text-primary"></i>
+                <h4>Best Price Guarantee</h4>
+                <p>Find the best flight deals</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card text-center">
+                <i class="fas fa-headset fa-3x mb-3 text-primary"></i>
+                <h4>24/7 Support</h4>
+                <p>We're here to help you</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card text-center">
+                <i class="fas fa-globe fa-3x mb-3 text-primary"></i>
+                <h4>Worldwide Coverage</h4>
+                <p>Book flights anywhere</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Flight Testimonials -->
+<div class="container mt-5 mb-5">
+    <h2 class="section-title text-center">What Our Flight Passengers Say</h2>
+    <div class="row g-4 mt-3">
+        <div class="col-md-4">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <i class="fas fa-quote-left fa-2x text-primary mb-3"></i>
+                    <p>"Amazing flight selection! Found the perfect route at a great price. Will definitely use again."</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Sarah Johnson">
+                    <div>
+                        <h5>Sarah Johnson</h5>
+                        <p class="text-muted">Frequent Flyer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <i class="fas fa-quote-left fa-2x text-primary mb-3"></i>
+                    <p>"The flight booking process was smooth and easy. Great selection of airlines."</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="John Smith">
+                    <div>
+                        <h5>John Smith</h5>
+                        <p class="text-muted">Business Traveler</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <i class="fas fa-quote-left fa-2x text-primary mb-3"></i>
+                    <p>"Best flight booking platform I've used. The customer service is exceptional."</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Emily Brown">
+                    <div>
+                        <h5>Emily Brown</h5>
+                        <p class="text-muted">Adventure Seeker</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Flight List Section -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Filter Results</h5>
+                    <form id="filterForm">
+                        <div class="mb-3">
+                            <label class="form-label">Price Range</label>
+                            <div class="d-flex gap-2">
+                                <input type="number" class="form-control" placeholder="Min" id="minPrice">
+                                <input type="number" class="form-control" placeholder="Max" id="maxPrice">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Airline</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="economy" id="classEconomy">
+                                <label class="form-check-label" for="classEconomy">Economy</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="business" id="classBusiness">
+                                <label class="form-check-label" for="classBusiness">Business</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="first" id="classFirst">
+                                <label class="form-check-label" for="classFirst">First Class</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row" id="flightsList">
+                <!-- Flights will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingModalLabel">Complete Your Flight Booking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm">
+                    <input type="hidden" id="modalFlightId">
+                    <div class="mb-3">
+                        <label class="form-label">Passenger Details</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control mb-2" placeholder="First Name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control mb-2" placeholder="Last Name" required>
+                            </div>
+                        </div>
+                        <input type="email" class="form-control mb-2" placeholder="Email" required>
+                        <input type="tel" class="form-control" placeholder="Phone Number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Additional Services</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="modalExtraBaggage">
+                            <label class="form-check-label" for="modalExtraBaggage">
+                                Extra Baggage (+$50)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="modalMeal">
+                            <label class="form-check-label" for="modalMeal">
+                                Special Meal (+$20)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="modalInsurance">
+                            <label class="form-check-label" for="modalInsurance">
+                                Travel Insurance (+$30)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="booking-summary">
+                        <h6>Booking Summary</h6>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Flight Price:</span>
+                            <span id="flightPrice">$0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Additional Services:</span>
+                            <span id="additionalServices">$0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Taxes:</span>
+                            <span id="taxes">$0</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <strong>Total:</strong>
+                            <strong id="totalPrice">$0</strong>
+                        </div>
+                    </div>
+                    <div class="payment-section mt-4">
+                        <h6>Payment Details</h6>
+                        <div class="mb-3">
+                            <label class="form-label">Card Number</label>
+                            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cardCvv" placeholder="123" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="confirmBooking()">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        :root {
+            --booking-blue: #003580;
+            --booking-light-blue: #0071c2;
+        }
+
+        .hero-section {
+            background: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+            position: relative;
+            min-height: 500px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: -50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-tabs .nav-link {
+            color: var(--booking-blue);
+            border-radius: 20px;
+            padding: 8px 20px;
+            margin-right: 10px;
+        }
+
+        .search-tabs .nav-link.active {
+            background-color: var(--booking-blue);
+            color: white;
+        }
+
+        .search-input {
+            position: relative;
+        }
+
+        .search-input i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .search-input input,
+        .search-input select {
+            padding-left: 40px;
+        }
+
+        .section-title {
+            color: var(--booking-blue);
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .destination-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 250px;
+        }
+
+        .destination-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .destination-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+        }
+
+        .offer-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card {
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-content {
+            margin-bottom: 20px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .testimonial-author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .btn-primary {
+            background-color: var(--booking-blue);
+            border-color: var(--booking-blue);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--booking-light-blue);
+            border-color: var(--booking-light-blue);
+        }
+
+        .btn-outline-primary {
+            color: var(--booking-blue);
+            border-color: var(--booking-blue);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--booking-blue);
+            border-color: var(--booking-blue);
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Sample data - replace with actual API call
+        const flights = [
+            {
+                id: 1,
+                airline: "Delta Airlines",
+                flightNumber: "DL123",
+                from: "New York",
+                to: "London",
+                departure: "2024-03-20T10:00:00",
+                arrival: "2024-03-20T22:00:00",
+                price: 599,
+                class: "Economy"
+            },
+            {
+                id: 2,
+                airline: "British Airways",
+                flightNumber: "BA456",
+                from: "London",
+                to: "Paris",
+                departure: "2024-03-21T14:30:00",
+                arrival: "2024-03-21T16:45:00",
+                price: 299,
+                class: "Business"
+            }
+        ];
+
+        function createFlightCard(flight) {
+            const departure = new Date(flight.departure);
+            const arrival = new Date(flight.arrival);
+            
+            return `
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">${flight.airline}</h5>
+                                <span class="badge bg-primary">${flight.class}</span>
+                            </div>
+                            <div class="flight-details">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6>${departure.toLocaleTimeString()}</h6>
+                                        <p class="text-muted mb-0">${flight.from}</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <i class="fas fa-plane"></i>
+                                        <p class="text-muted mb-0">${Math.round((arrival - departure) / (1000 * 60 * 60))}h</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <h6>${arrival.toLocaleTimeString()}</h6>
+                                        <p class="text-muted mb-0">${flight.to}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="h5 mb-0">$${flight.price}</span>
+                                    <small class="text-muted">/person</small>
+                                </div>
+                                <button class="btn btn-primary" onclick="bookFlight(${flight.id})">Book Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function bookFlight(id) {
+            const flight = flights.find(f => f.id === id);
+            if (!flight) return;
+
+            // Get the current search parameters
+            const departureDate = document.querySelector('input[name="departureDate"]').value;
+            const passengers = document.querySelector('select[name="passengers"]').value;
+
+            if (!departureDate) {
+                alert('Please select departure date first.');
+                return;
+            }
+
+            // Set modal values
+            document.getElementById('modalFlightId').value = flight.id;
+
+            // Calculate and update prices
+            updateBookingSummary(flight, passengers);
+
+            // Show the modal
+            const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            bookingModal.show();
+        }
+
+        function updateBookingSummary(flight, passengers) {
+            const basePrice = flight.price * parseInt(passengers);
+            
+            // Additional services
+            let additionalServices = 0;
+            if (document.getElementById('modalExtraBaggage').checked) additionalServices += 50 * parseInt(passengers);
+            if (document.getElementById('modalMeal').checked) additionalServices += 20 * parseInt(passengers);
+            if (document.getElementById('modalInsurance').checked) additionalServices += 30 * parseInt(passengers);
+            
+            // Calculate taxes (10%)
+            const subtotal = basePrice + additionalServices;
+            const taxes = subtotal * 0.1;
+            const total = subtotal + taxes;
+            
+            // Update the summary
+            document.getElementById('flightPrice').textContent = `$${basePrice.toFixed(2)}`;
+            document.getElementById('additionalServices').textContent = `$${additionalServices.toFixed(2)}`;
+            document.getElementById('taxes').textContent = `$${taxes.toFixed(2)}`;
+            document.getElementById('totalPrice').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function confirmBooking() {
+            // Validate card details
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCvv = document.getElementById('cardCvv').value;
+
+            if (!cardNumber || !cardExpiry || !cardCvv) {
+                alert('Please fill in all card details.');
+                return;
+            }
+
+            if (!/^\d{16}$/.test(cardNumber)) {
+                alert('Please enter a valid 16-digit card number.');
+                return;
+            }
+
+            if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+                alert('Please enter a valid expiry date (MM/YY).');
+                return;
+            }
+
+            if (!/^\d{3}$/.test(cardCvv)) {
+                alert('Please enter a valid 3-digit CVV.');
+                return;
+            }
+
+            // Get booking details
+            const flight = flights.find(f => f.id === parseInt(document.getElementById('modalFlightId').value));
+            const booking = {
+                flightId: flight.id,
+                airline: flight.airline,
+                flightNumber: flight.flightNumber,
+                departure: document.querySelector('input[name="departureDate"]').value,
+                passengers: document.querySelector('select[name="passengers"]').value,
+                additionalServices: {
+                    extraBaggage: document.getElementById('modalExtraBaggage').checked,
+                    meal: document.getElementById('modalMeal').checked,
+                    insurance: document.getElementById('modalInsurance').checked
+                },
+                totalPrice: document.getElementById('totalPrice').textContent,
+                bookingDate: new Date().toISOString()
+            };
+
+            // Store booking in localStorage
+            const bookings = JSON.parse(localStorage.getItem('bookedFlights') || '[]');
+            bookings.push(booking);
+            localStorage.setItem('bookedFlights', JSON.stringify(bookings));
+
+            // Close modal and show success message
+            const bookingModal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
+            bookingModal.hide();
+            alert('Booking confirmed successfully! You can view your booking in the customer cabinet.');
+        }
+
+        // Add event listeners for price updates
+        ['modalExtraBaggage', 'modalMeal', 'modalInsurance'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                const flight = flights.find(f => f.id === parseInt(document.getElementById('modalFlightId').value));
+                if (flight) updateBookingSummary(flight, document.querySelector('select[name="passengers"]').value);
+            });
+        });
+
+        // Format card number input
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            if (value.length > 16) value = value.slice(0, 16);
+            e.target.value = value.replace(/(\d{4})/g, '$1 ').trim();
+        });
+
+        // Format expiry date input
+        document.getElementById('cardExpiry').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        function renderFlights() {
+            const container = document.getElementById('flightsList');
+            container.innerHTML = flights.map(createFlightCard).join('');
+        }
+
+        // Initial render
+        renderFlights();
+
+        // Filter form submission
+        document.getElementById('filterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+            const selectedClasses = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+
+            const filteredFlights = flights.filter(flight => {
+                const priceMatch = flight.price >= minPrice && flight.price <= maxPrice;
+                const classMatch = selectedClasses.length === 0 || selectedClasses.includes(flight.class.toLowerCase());
+                return priceMatch && classMatch;
+            });
+
+            const container = document.getElementById('flightsList');
+            container.innerHTML = filteredFlights.map(createFlightCard).join('');
+        });
+    </script>
+} 

@@ -1,0 +1,167 @@
+@{
+    ViewData["Title"] = "Booked Services";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <h2>My Booked Services</h2>
+    
+    <ul class="nav nav-tabs mb-4" id="bookingsTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="flights-tab" data-bs-toggle="tab" data-bs-target="#flights" type="button" role="tab">Flights</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="hotels-tab" data-bs-toggle="tab" data-bs-target="#hotels" type="button" role="tab">Hotels</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="attractions-tab" data-bs-toggle="tab" data-bs-target="#attractions" type="button" role="tab">Attractions</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="bookingsTabContent">
+        <div class="tab-pane fade show active" id="flights" role="tabpanel">
+            <div id="bookedFlightsList">
+                <!-- Booked flights will be loaded here -->
+            </div>
+        </div>
+        <div class="tab-pane fade" id="hotels" role="tabpanel">
+            <div id="bookedHotelsList">
+                <!-- Booked hotels will be loaded here -->
+            </div>
+        </div>
+        <div class="tab-pane fade" id="attractions" role="tabpanel">
+            <div id="bookedAttractionsList">
+                <!-- Booked attractions will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function createFlightBookingCard(booking) {
+            const departureTime = new Date(booking.departureTime);
+            const arrivalTime = new Date(booking.arrivalTime);
+            const duration = Math.round((arrivalTime - departureTime) / (1000 * 60));
+
+            return `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="card-title">${booking.airline} - ${booking.flightNumber}</h5>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">${departureTime.getHours()}:${departureTime.getMinutes().toString().padStart(2, '0')}</h6>
+                                        <small class="text-muted">${booking.departureCity}</small>
+                                    </div>
+                                    <div class="flight-path">
+                                        <div class="duration">${Math.floor(duration / 60)}h ${duration % 60}m</div>
+                                        <div class="line"></div>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">${arrivalTime.getHours()}:${arrivalTime.getMinutes().toString().padStart(2, '0')}</h6>
+                                        <small class="text-muted">${booking.arrivalCity}</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Class:</strong> ${booking.class}</p>
+                                        <p class="mb-1"><strong>Passengers:</strong> ${booking.passengers}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Booking Date:</strong> ${formatDate(booking.bookingDate)}</p>
+                                        <p class="mb-1"><strong>Status:</strong> <span class="badge bg-success">${booking.status}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <h4 class="mb-3">${booking.currency} ${booking.price}</h4>
+                                <button class="btn btn-outline-primary me-2" onclick="viewBookingDetails(${booking.flightId})">View Details</button>
+                                <button class="btn btn-outline-danger" onclick="cancelBooking(${booking.flightId})">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadBookedFlights() {
+            const bookings = JSON.parse(localStorage.getItem('bookedFlights') || '[]');
+            const flightsList = document.getElementById('bookedFlightsList');
+            
+            if (bookings.length === 0) {
+                flightsList.innerHTML = '<div class="alert alert-info">No flights booked yet.</div>';
+                return;
+            }
+
+            flightsList.innerHTML = bookings.map(booking => createFlightBookingCard(booking)).join('');
+        }
+
+        function viewBookingDetails(flightId) {
+            // TODO: Implement booking details view
+            alert('Viewing booking details...');
+        }
+
+        function cancelBooking(flightId) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                let bookings = JSON.parse(localStorage.getItem('bookedFlights') || '[]');
+                bookings = bookings.filter(booking => booking.flightId !== flightId);
+                localStorage.setItem('bookedFlights', JSON.stringify(bookings));
+                loadBookedFlights();
+            }
+        }
+
+        // Load booked flights when the page loads
+        document.addEventListener('DOMContentLoaded', loadBookedFlights);
+    </script>
+}
+
+@section Styles {
+    <style>
+        .flight-path {
+            position: relative;
+            flex-grow: 1;
+            margin: 0 20px;
+            text-align: center;
+        }
+
+        .flight-path .line {
+            height: 2px;
+            background-color: #dee2e6;
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .flight-path .duration {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.4em 0.6em;
+        }
+
+        .nav-tabs .nav-link {
+            color: #495057;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #007bff;
+            font-weight: 500;
+        }
+    </style>
+} 

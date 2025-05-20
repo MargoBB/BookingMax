@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "Hash": "8b1zhW3pM1ykG2STh38h42S/nORDhLgyzFhVVs6K11w=",
+  "Source": "BookingClone",
+  "BasePath": "_content/BookingClone",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "BookingClone\\wwwroot",
+      "Source": "BookingClone",
+      "ContentRoot": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\",
+      "BasePath": "_content/BookingClone",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\css\\site.css",
+      "SourceId": "BookingClone",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\",
+      "BasePath": "_content/BookingClone",
+      "RelativePath": "css/site.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\js\\site.js",
+      "SourceId": "BookingClone",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\",
+      "BasePath": "_content/BookingClone",
+      "RelativePath": "js/site.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\site.js"
+    }
+  ]
+}

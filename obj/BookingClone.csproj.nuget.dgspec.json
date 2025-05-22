@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\BookingClone.csproj": {}
+    "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\BookingClone.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\BookingClone.csproj": {
+    "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\BookingClone.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\BookingClone.csproj",
+        "projectUniqueName": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\BookingClone.csproj",
         "projectName": "BookingClone",
-        "projectPath": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\BookingClone.csproj",
+        "projectPath": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\BookingClone.csproj",
         "packagesPath": "C:\\Users\\Rita\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\obj\\",
+        "outputPath": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Rita\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -48,6 +48,16 @@
             "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
               "target": "Package",
               "version": "[7.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.17, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[7.0.17, )"
             },
             "Microsoft.Extensions.Logging.Console": {
               "target": "Package",

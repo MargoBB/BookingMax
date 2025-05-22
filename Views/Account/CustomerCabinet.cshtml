@@ -127,6 +127,42 @@
     </div>
 </div>
 
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="mb-3">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="editFirstName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="editLastName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="editPhone">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" id="editAddress">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Booking Details Modal -->
 <div class="modal fade" id="bookingDetailsModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -253,53 +289,71 @@
 @section Scripts {
     <script>
         // Load user profile data
-        function loadUserProfile() {
-            // In a real application, this would come from your backend
-            const userProfile = {
-                fullName: "John Doe",
-                username: "@User.Identity?.Name",
-                email: "john.doe@example.com",
-                phone: "+1 234 567 890"
-            };
-
-            document.getElementById('fullName').value = userProfile.fullName;
-            document.getElementById('username').value = userProfile.username;
-            document.getElementById('email').value = userProfile.email;
-            document.getElementById('phone').value = userProfile.phone;
+        async function loadUserProfile() {
+            try {
+                const response = await fetch('/api/account/profile');
+                if (response.ok) {
+                    const userProfile = await response.json();
+                    document.getElementById('fullName').value = `${userProfile.firstName} ${userProfile.lastName}`;
+                    document.getElementById('username').value = userProfile.email;
+                    document.getElementById('email').value = userProfile.email;
+                    document.getElementById('phone').value = userProfile.phoneNumber || '';
+                }
+            } catch (error) {
+                console.error('Failed to load user profile:', error);
+            }
         }
 
         // Edit profile
         function editProfile() {
-            const modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+            const fullName = document.getElementById('fullName').value.split(' ');
+            const firstName = fullName[0] || '';
+            const lastName = fullName.slice(1).join(' ') || '';
             
-            // Populate modal with current values
-            document.getElementById('editFullName').value = document.getElementById('fullName').value;
-            document.getElementById('editEmail').value = document.getElementById('email').value;
+            document.getElementById('editFirstName').value = firstName;
+            document.getElementById('editLastName').value = lastName;
             document.getElementById('editPhone').value = document.getElementById('phone').value;
             
+            const modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
             modal.show();
         }
 
         // Save profile changes
-        function saveProfile() {
-            // In a real application, this would send data to your backend
-            const newProfile = {
-                fullName: document.getElementById('editFullName').value,
-                email: document.getElementById('editEmail').value,
-                phone: document.getElementById('editPhone').value
+        async function saveProfile() {
+            const profileData = {
+                firstName: document.getElementById('editFirstName').value,
+                lastName: document.getElementById('editLastName').value,
+                phoneNumber: document.getElementById('editPhone').value,
+                address: document.getElementById('editAddress').value
             };
 
-            // Update the display
-            document.getElementById('fullName').value = newProfile.fullName;
-            document.getElementById('email').value = newProfile.email;
-            document.getElementById('phone').value = newProfile.phone;
+            try {
+                const response = await fetch('/Account/UpdateProfile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(profileData)
+                });
 
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
-            modal.hide();
+                if (response.ok) {
+                    // Update the display
+                    document.getElementById('fullName').value = `${profileData.firstName} ${profileData.lastName}`;
+                    document.getElementById('phone').value = profileData.phoneNumber;
 
-            // Show success message
-            alert('Profile updated successfully!');
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                    modal.hide();
+
+                    // Show success message
+                    alert('Profile updated successfully!');
+                } else {
+                    throw new Error('Failed to update profile');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile. Please try again.');
+            }
         }
 
         // Update booking stats

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8b1zhW3pM1ykG2STh38h42S/nORDhLgyzFhVVs6K11w=",
+  "Hash": "/H4OEGs09Ebyl4YjR/CiHkFJCVA0NW1JlrUoT7oZyoQ=",
   "Source": "BookingClone",
   "BasePath": "_content/BookingClone",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "BookingClone\\wwwroot",
       "Source": "BookingClone",
-      "ContentRoot": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\wwwroot\\",
       "BasePath": "_content/BookingClone",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\css\\site.css",
+      "Identity": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\wwwroot\\css\\site.css",
       "SourceId": "BookingClone",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\wwwroot\\",
       "BasePath": "_content/BookingClone",
       "RelativePath": "css/site.css",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\css\\site.css"
     },
     {
-      "Identity": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\js\\site.js",
+      "Identity": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\wwwroot\\js\\site.js",
       "SourceId": "BookingClone",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\Booking4\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Rita\\Desktop\\HuiVTomate\\MainBookMax\\wwwroot\\",
       "BasePath": "_content/BookingClone",
       "RelativePath": "js/site.js",
       "AssetKind": "All",
